@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--Enables use of Thymeleaf syntax-->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!--  This makes the title dynamic  -->
+    <title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Just Tech News</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+<div class="wrapper">
+    <header>
+        <h1>
+            <a href="/">Just Tech News</a>
+        </h1>
+        <nav>
+            <!-- Thymeleaf Conditional -->
+            <!-- If user is logged in, display the dashboard and logout option -->
+            <div th:if="${loggedIn}">
+                <a th:href="@{/dashboard}">dashboard</a>
+                <a th:href="@{/users/logout}">logout</a>
+            </div>
+            <!-- Otherwise, if user is logged out, display login page -->
+            <div th:unless="${loggedIn}">
+                <a th:href="@{/login}">login</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- This allows other templates to be displayed;
+    same function as {{{ body }}} in Handlebars.js -->
+    <main layout:fragment="content">
+        <p>This is filled by the content template.</p>
+    </main>
+
+    <footer>
+        Thanks for visiting!
+    </footer>
+</div>
+
+</body>
+</html>
