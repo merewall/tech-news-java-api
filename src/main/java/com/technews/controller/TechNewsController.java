@@ -1,3 +1,6 @@
+// TechNewsController manages the internal API processing calls
+// for the many requests that a user can make to the API
+// as well as display/retrieval of data to/from the user
 package com.technews.controller;
 
 import com.technews.model.Post;

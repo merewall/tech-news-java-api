@@ -1,3 +1,5 @@
+// HomePageController manages the entry and exit
+// of the user inot and out of the API
 package com.technews.controller;
 
 import com.technews.model.Post;
