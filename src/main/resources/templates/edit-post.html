@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Edit Post</title>
+</head>
+
+<body>
+
+<!-- Content to render in layout.html -->
+<div layout:fragment="content">
+
+    <!-- Conditional rendering of notice -->
+    <div th:if="${notice}" class="flash-message">
+        <h3>[[${notice}]]</h3>
+    </div>
+
+    <a th:href="@{/dashboard}"> &larr; Back to dashboard</a>
+    <h2>
+        Edit Post
+    </h2>
+
+    <!-- Form to edit a post by ID with API Put Route on submission -->
+    <form action="#" th:action="@{/posts/{id}(id=${post.id})}" th:object="${post}" method="post" class="edit-post-form">
+        <div>
+            <input type="text" th:field="*{title}"/>
+            <span th:text="${#strings.replace(post.postUrl,'http://','')}"></span>
+        </div>
+        <div th:if="${post.voteCount == 1}" class="meta">
+            [[${post.voteCount}]] point by [[${post.userName}]] on
+            <span th:text="${#dates.format(post.postedAt, 'MM-dd-YY')}"></span>
+            |
+            <a th:href="@{/post/{id}(id=${post.id})}" th:if="${post.comments.size() == 1}">[[${post.comments.size()}]] comment</a>
+            <a th:href="@{/post/{id}(id=${post.id})}" th:unless="${post.comments.size() == 1}">[[${post.comments.size()}]] comments</a>
+        </div>
+        <div th:unless="${post.voteCount == 1}" class="meta">
+            [[${post.voteCount}]] points by [[${post.userName}]] on
+            <span th:text="${#dates.format(post.postedAt, 'MM-dd-YY')}"></span>
+            |
+            <a th:href="@{/post/{id}(id=${post.id})}" th:if="${post.comments.size() == 1}">[[${post.comments.size()}]] comment</a>
+            <a th:href="@{/post/{id}(id=${post.id})}" th:unless="${post.comments.size() == 1}">[[${post.comments.size()}]] comments</a>
+        </div>
+        <!-- Button to submit your edits to your posts -->
+        <button type="submit">Edit post title</button>
+        <!-- Button to delete post -->
+        <button type="button" class="delete-post-btn">Delete post</button>
+    </form>
+
+
+    <!-- Form to add a comment on a post by ID with API POST Route -->
+    <form action="#" th:action="@{/comments/edit}" th:object="${comment}" method="post" class="comment-form">
+        <div>
+            <input type="hidden" th:value="${post.id}" name="postId"/>
+            <textarea name="comment-body" th:field="*{commentText}"></textarea>
+        </div>
+
+        <div>
+            <button type="submit">add comment</button>
+        </div>
+    </form>
+
+    <!--  Render comments for the post  -->
+    <div class="comments">
+        <div th:insert="fragments/comment-fragment :: comment-fragment"></div>
+    </div>
+
+    <!-- Add JavaScript to delete a post if the user is logged in -->
+    <div th:if="${loggedIn}">
+        <script src="/js/delete-post.js"></script>
+    </div>
+</div>
+
+
+</body>
+</html>
